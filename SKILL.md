@@ -1,7 +1,7 @@
 ---
 name: qiq-alignmain
 description: 把主干（main/master/develop）的最新修改安全对齐（合流）到当前工作分支。覆盖确认分支、暂存未提交改动、合流前逻辑冲突检查、merge 主干、行冲突解决、合流后整体审查。重点检测 git 不报行冲突但逻辑互相破坏的语义冲突，并在“不回滚已有逻辑”“完整实现分支目标”两条硬约束下解决冲突，不可兼得时停下交人工确认。触发：把 main 对齐到分支 / 合流主干 / merge main 到当前分支 / align main / 同步主干 / 解决主干合流冲突。
-version: 0.2.0
+version: 0.3.0
 ---
 
 # qiq-alignmain — 把主干修改安全对齐到工作分支
