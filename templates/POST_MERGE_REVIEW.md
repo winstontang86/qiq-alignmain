@@ -23,6 +23,7 @@
 | 静态检查/lint | `<lint cmd>` | |
 | 测试 | `<test cmd>` | |
 | 接口一致性抽样 | `grep ...` | |
+| 变动文件重复行检查 | `git diff --name-only <merge-base> HEAD \| while read f; do ...` | ✅ 无重复行 / 🔴 新引入重复行(已修复) / 🟡 合流前既有 |
 
 ## 4. 暂存改动恢复
 

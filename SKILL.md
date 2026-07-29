@@ -45,7 +45,7 @@ Phase 0 确认工作分支、主干分支、仓库状态，建立产物目录
   ↓
 Phase 1 暂存未提交改动，记录回退锚点
   ↓
-Phase 2 ★ 合流前逻辑冲突检查，写 LOGICAL_CONFLICTS.md，STOP & CONFIRM
+Phase 2 ★ 合流前逻辑冲突检查，写 LOGICAL_CONFLICTS.md
   ↓
 Phase 3 merge origin/<主干>
   ↓
@@ -74,7 +74,7 @@ Phase 5 ★ 合流后整体审查，写 POST_MERGE_REVIEW.md，STOP & CONFIRM
 - 用户偏好提交时可使用 WIP commit，但必须记录 commit hash 与后续恢复方式。
 - 禁止用 `reset --hard`、`checkout -- .`、`clean -fd` 等方式丢弃改动。
 - **暂存完成后**，检查当前工作分支的远程是否有更新（`git fetch origin <当前分支>`），若有新的远程 commit，先执行 `git merge origin/<当前分支>` 将远程更新合入当前分支，处理可能的冲突后再进入 Phase 2。
-### Phase 2 — 合流前逻辑冲突检查（★STOP & CONFIRM）
+### Phase 2 — 合流前逻辑冲突检查（★）
 
 按 `references/02-logical-conflict-check.md` 执行，这是本 skill 的核心价值：
 
@@ -84,7 +84,7 @@ Phase 5 ★ 合流后整体审查，写 POST_MERGE_REVIEW.md，STOP & CONFIRM
    - **A 类：仅分支修改文件**（直接放过，分支自身改动）。
 2. 对 C 类文件按 7 类语义冲突逐类给结论：函数/方法签名、数据结构/字段、接口/契约、行为/默认值/常量、模块重构/搬迁/删除、共享资源/全局状态、依赖/构建/迁移。**无论 git 是否有行冲突，C 类文件都必须深度检查逻辑冲突与覆盖。**
 3. 写 `.qiqskills/<仓库名>-<分支名>/LOGICAL_CONFLICTS.md`：包含 A/B 类放过记录、C 类冲突点、双方改动、风险等级、合流后修正预案；未发现也要写明已检查范围和放过依据。
-4. **STOP**：把清单交用户确认；高风险项必须达成处理共识后才进入 Phase 3。
+4. 产出清单后直接进入 Phase 3；高风险项将在 Phase 5 合流后审查中逐条核对消化。
 ### Phase 3 — merge 主干
 
 按 `references/03-merge-and-resolve.md` §3 执行：
@@ -113,6 +113,7 @@ Phase 5 ★ 合流后整体审查，写 POST_MERGE_REVIEW.md，STOP & CONFIRM
 - 逐条核对 `LOGICAL_CONFLICTS.md`：确认高/中风险语义冲突已在合流结果中消化。
 - 检查是否覆盖或回退了主干已有功能/修复，尤其是干净合入和偏向分支侧解决的位置。
 - 检查是否引入 bug：签名、字段、契约、配置、依赖、迁移等是否一致；尽量运行构建/测试/lint。
+- 检查所有变动文件是否存在因合流新引入的重复行；若存在则修复并重新检查。
 - 处理 Phase 1 暂存：提示或执行 stash pop / WIP 恢复；若产生二次冲突，按 Phase 4 同样记录和对账。
 - 写 `POST_MERGE_REVIEW.md`：逻辑冲突消化结果、覆盖线上功能结论、构建/测试结果、stash/WIP 处理、遗留风险。
 - **STOP**：把审查结论交用户确认；存在未消化高风险项、未决人工项、构建/测试失败时，不宣告完成。
@@ -162,3 +163,4 @@ Phase 5 ★ 合流后整体审查，写 POST_MERGE_REVIEW.md，STOP & CONFIRM
 - [ ] merge 结果已判定；如有行冲突，冲突文件与冲突块总数已在解决前存档。
 - [ ] `CONFLICT_RESOLUTION.md` 逐块记录；记录条数与冲突块数一致；所有 `NEEDS-HUMAN` 已回填裁决。
 - [ ] `POST_MERGE_REVIEW.md` 已产出；逻辑冲突预案、覆盖线上功能、引入 bug、构建/测试、stash/WIP 恢复均有结论。
+- [ ] 变动文件重复行检查已执行；无重复行或新引入重复行已修复。
